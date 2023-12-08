@@ -7,7 +7,7 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCabin } from "../../services/apiCabins";
+import { createEditCabin } from "../../services/apiCabins";
 import toast from "react-hot-toast";
 
 const FormRow = styled.div`
@@ -50,8 +50,9 @@ const Error = styled.span`
 function CreateCabinForm() {
   const queryClient = useQueryClient();
   const { register, handleSubmit, reset, getValues, formState } = useForm();
+  // eslint-disable-next-line no-unused-vars
   const { mutate, isLoading: isCreating } = useMutation({
-    mutationFn: createCabin,
+    mutationFn: createEditCabin,
     onSuccess: () => {
       toast.success("New cabin successfully created");
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
@@ -62,10 +63,11 @@ function CreateCabinForm() {
     },
   });
   const { errors } = formState;
-  console.log(errors);
 
   function onSubmit(data) {
-    mutate(data);
+    //console.log(data.image[0]);
+    console.log(data.image);
+    mutate({ ...data, image: data.image["0"] });
   }
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -89,6 +91,9 @@ function CreateCabinForm() {
             min: { value: 1, message: "Capacity should be at least 1" },
           })}
         />
+        {errors?.maxCapacity?.message && (
+          <Error>{errors.maxCapacity.message}</Error>
+        )}
       </FormRow>
 
       <FormRow>
@@ -101,6 +106,9 @@ function CreateCabinForm() {
             min: { value: 1, message: "Price should be at least 1" },
           })}
         />
+        {errors?.regularPrice?.message && (
+          <Error>{errors.regularPrice.message}</Error>
+        )}
       </FormRow>
 
       <FormRow>
@@ -112,10 +120,11 @@ function CreateCabinForm() {
           {...register("discount", {
             required: "This field is required",
             validate: (value) =>
-              value <= getValues().regularPrice ||
-              "The discount cannot be greater than regular price",
+              +value <= +getValues().regularPrice ||
+              "The discount should be less than regular price",
           })}
         />
+        {errors?.discount?.message && <Error>{errors.discount.message}</Error>}
       </FormRow>
 
       <FormRow>
@@ -126,11 +135,18 @@ function CreateCabinForm() {
           defaultValue=""
           {...register("description", { required: "This field is required" })}
         />
+        {errors?.description?.message && (
+          <Error>{errors.description.message}</Error>
+        )}
       </FormRow>
 
       <FormRow>
         <Label htmlFor="image">Cabin photo</Label>
-        <FileInput id="image" accept="image/*" />
+        <FileInput
+          id="image"
+          accept="image/*"
+          {...register("image", { required: "This field is required" })}
+        />
       </FormRow>
 
       <FormRow>
