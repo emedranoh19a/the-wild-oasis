@@ -46,7 +46,7 @@ const Error = styled.span`
 `;
 
 // eslint-disable-next-line react/prop-types
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   const { id: editId, ...editValues } = cabinToEdit; // we are reciclying the submit phase
   const { createCabin, isCreating } = useCreateCabin();
   const { editCabin, isEditing } = useEditCabin();
@@ -69,6 +69,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           //we do it here since we have access to React Hook Form
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         }
       );
@@ -80,12 +81,16 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           //we do it here since we have access to React Hook Form
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         }
       );
   }
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow>
         <Label htmlFor="name">Cabin name</Label>
         <Input
@@ -173,7 +178,11 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isWorking}>

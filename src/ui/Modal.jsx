@@ -1,4 +1,13 @@
+/* eslint-disable react/prop-types */
+//TODO destroy the eslint unused for file
+/* eslint-disable no-unused-vars */
+import { cloneElement, createContext, useContext, useState } from "react";
+import { createPortal } from "react-dom";
+
 import styled from "styled-components";
+import { HiXMark } from "react-icons/hi2";
+
+import Button from "./Button";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -24,7 +33,7 @@ const Overlay = styled.div`
   transition: all 0.5s;
 `;
 
-const Button = styled.button`
+const ExitButton = styled.button`
   background: none;
   border: none;
   padding: 0.4rem;
@@ -48,3 +57,46 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+
+const ModalContext = createContext();
+
+function Modal({ children }) {
+  const [openName, setOpenName] = useState("");
+
+  const close = () => setOpenName("");
+  const open = setOpenName;
+
+  //Maybe
+  return (
+    <ModalContext.Provider value={{ openName, close, open }}>
+      {children}
+    </ModalContext.Provider>
+  );
+}
+
+function Open({ opens: windowName }) {
+  const { open } = useContext(ModalContext);
+  return <Button onClick={() => open(windowName)}>Add new Cabin</Button>;
+}
+
+function Window({ children, name }) {
+  const { openName, close } = useContext(ModalContext);
+
+  if (name !== openName) return null;
+
+  return createPortal(
+    <Overlay>
+      <StyledModal>
+        <ExitButton onClick={close}>
+          <HiXMark />
+        </ExitButton>
+        <div>{cloneElement(children, { onCloseModal: close })}</div>
+      </StyledModal>
+    </Overlay>,
+    document.body
+  );
+}
+Modal.Open = Open;
+Modal.Window = Window;
+
+export default Modal;
