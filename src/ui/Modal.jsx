@@ -1,7 +1,14 @@
 /* eslint-disable react/prop-types */
 //TODO destroy the eslint unused for file
 /* eslint-disable no-unused-vars */
-import { cloneElement, createContext, useContext, useState } from "react";
+import {
+  cloneElement,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 
 import styled from "styled-components";
@@ -74,19 +81,35 @@ function Modal({ children }) {
   );
 }
 
-function Open({ opens: windowName }) {
+function Open({ children, opens: windowName }) {
   const { open } = useContext(ModalContext);
-  return <Button onClick={() => open(windowName)}>Add new Cabin</Button>;
+  return <>{cloneElement(children, { onClick: () => open(windowName) })}</>;
+  // <Button onClick={() => open(windowName)}>Add new Cabin</Button>;
 }
 
 function Window({ children, name }) {
   const { openName, close } = useContext(ModalContext);
+  const ref = useRef();
+
+  useEffect(() => {
+    function handleClick(e) {
+      //The reference exists (it is open) and the click
+      if (ref.current && !ref.current.contains(e.target)) {
+        console.log("click outside");
+        close();
+      }
+    }
+
+    document.addEventListener("click", handleClick, true);
+
+    return () => document.removeEventListener("click", handleClick);
+  }, [close]);
 
   if (name !== openName) return null;
 
   return createPortal(
     <Overlay>
-      <StyledModal>
+      <StyledModal ref={ref}>
         <ExitButton onClick={close}>
           <HiXMark />
         </ExitButton>
