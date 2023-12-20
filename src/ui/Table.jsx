@@ -1,3 +1,5 @@
+//TODO Remove es-lint ignore
+/* eslint-disable no-unused-vars */
 import styled from "styled-components";
 
 const StyledTable = styled.div`
@@ -58,3 +60,8 @@ const Empty = styled.p`
   text-align: center;
   margin: 2.4rem;
 `;
+
+function Table() {
+  return <></>;
+}
+export default Table;

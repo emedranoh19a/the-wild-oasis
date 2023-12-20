@@ -2,8 +2,6 @@ import styled from "styled-components";
 import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
 import { useCabins } from "./useCabins";
-//TODO
-// eslint-disable-next-line no-unused-vars
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
 
@@ -13,8 +11,7 @@ const Table = styled.div`
   overflow: hidden;
   width: 100%;
 `;
-//TODO
-// eslint-disable-next-line no-unused-vars
+
 const TableHeader = styled.header`
   display: grid;
   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;

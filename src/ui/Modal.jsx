@@ -1,20 +1,13 @@
 /* eslint-disable react/prop-types */
 //TODO destroy the eslint unused for file
 /* eslint-disable no-unused-vars */
-import {
-  cloneElement,
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 
 import styled from "styled-components";
 import { HiXMark } from "react-icons/hi2";
 
-import Button from "./Button";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -73,7 +66,6 @@ function Modal({ children }) {
   const close = () => setOpenName("");
   const open = setOpenName;
 
-  //Maybe
   return (
     <ModalContext.Provider value={{ openName, close, open }}>
       {children}
@@ -89,22 +81,7 @@ function Open({ children, opens: windowName }) {
 
 function Window({ children, name }) {
   const { openName, close } = useContext(ModalContext);
-  const ref = useRef();
-
-  useEffect(() => {
-    function handleClick(e) {
-      //The reference exists (it is open) and the click
-      if (ref.current && !ref.current.contains(e.target)) {
-        console.log("click outside");
-        close();
-      }
-    }
-
-    document.addEventListener("click", handleClick, true);
-
-    return () => document.removeEventListener("click", handleClick);
-  }, [close]);
-
+  const { ref } = useOutsideClick(close);
   if (name !== openName) return null;
 
   return createPortal(
