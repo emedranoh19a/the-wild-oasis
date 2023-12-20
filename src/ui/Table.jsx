@@ -1,6 +1,8 @@
 //TODO Remove es-lint ignore
 /* eslint-disable no-unused-vars */
+import { createContext, useContext } from "react";
 import styled from "styled-components";
+import propTypes from "prop-types";
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -60,8 +62,49 @@ const Empty = styled.p`
   text-align: center;
   margin: 2.4rem;
 `;
+const TableContext = createContext();
 
-function Table() {
-  return <></>;
+function Table({ children, columns }) {
+  return (
+    <TableContext.Provider value={{ columns }}>
+      <StyledTable role="table" columns={columns}>
+        {children}
+      </StyledTable>
+    </TableContext.Provider>
+  );
 }
+
+function Header({ children }) {
+  const { columns } = useContext(TableContext);
+  return (
+    <StyledHeader role="row" columns={columns} as="header">
+      {children}
+    </StyledHeader>
+  );
+}
+function Row({ children }) {
+  const { columns } = useContext(TableContext);
+  return (
+    <StyledRow role="row" columns={columns}>
+      {children}
+    </StyledRow>
+  );
+}
+function Body({ data, render }) {
+  if (data.Length === 0) return <Empty>There is no data at the moment </Empty>;
+  return <StyledBody>{data.map(render)}</StyledBody>;
+}
+
+Table.Header = Header;
+Table.Row = Row;
+Table.Body = Body;
+
+Table.propTypes = {
+  children: propTypes.any,
+  columns: propTypes.string,
+};
+Header.propTypes = { children: propTypes.any };
+Body.propTypes = { data: propTypes.array, render: propTypes.func };
+Row.propTypes = { children: propTypes.any };
+
 export default Table;
