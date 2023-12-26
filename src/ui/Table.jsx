@@ -44,7 +44,7 @@ const StyledBody = styled.section`
   margin: 0.4rem 0;
 `;
 
-const Footer = styled.footer`
+const StyledFooter = styled.footer`
   background-color: var(--color-grey-50);
   display: flex;
   justify-content: center;
@@ -91,13 +91,17 @@ function Row({ children }) {
   );
 }
 function Body({ data, render }) {
-  if (data.Length === 0) return <Empty>There is no data at the moment </Empty>;
+  if (data.length === 0) return <Empty>There is no data at the moment </Empty>;
   return <StyledBody>{data.map(render)}</StyledBody>;
+}
+function Footer({ children }) {
+  return <StyledFooter>{children}</StyledFooter>;
 }
 
 Table.Header = Header;
 Table.Row = Row;
 Table.Body = Body;
+Table.Footer = Footer;
 
 Table.propTypes = {
   children: propTypes.any,
@@ -106,5 +110,6 @@ Table.propTypes = {
 Header.propTypes = { children: propTypes.any };
 Body.propTypes = { data: propTypes.array, render: propTypes.func };
 Row.propTypes = { children: propTypes.any };
+Footer.propTypes = { children: propTypes.any };
 
 export default Table;

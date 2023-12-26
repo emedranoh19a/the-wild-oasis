@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+//TODO Deletion of es lint ignore
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
 
@@ -6,7 +8,8 @@ import Table from "../../ui/Table";
 
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
-
+import propTypes from "prop-types";
+import { bookings } from "../../data/data-bookings";
 const Cabin = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
@@ -34,28 +37,27 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
-function BookingRow({
-  booking: {
+function BookingRow({ booking }) {
+  const {
     id: bookingId,
-    created_at,
+    cabins: { name: cabinName },
+    status,
     startDate,
     endDate,
     numNights,
-    numGuests,
     totalPrice,
-    status,
     guests: { fullName: guestName, email },
-    cabins: { name: cabinName },
-  },
-}) {
+  } = booking;
+
   const statusToTagName = {
-    unconfirmed: "blue",
     "checked-in": "green",
+    unconfirmed: "blue",
     "checked-out": "silver",
   };
 
   return (
-    <Table.Row>
+    <Table.Row key={bookingId}>
+      {/* cabinName before */}
       <Cabin>{cabinName}</Cabin>
 
       <Stacked>
@@ -83,4 +85,7 @@ function BookingRow({
   );
 }
 
+BookingRow.propTypes = {
+  booking: propTypes.object,
+};
 export default BookingRow;
