@@ -11,7 +11,7 @@ import DataItem from "../../ui/DataItem";
 import { Flag } from "../../ui/Flag";
 
 import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
-
+import propTypes from "prop-types";
 const StyledBookingDataBox = styled.section`
   /* Box */
   background-color: var(--color-grey-0);
@@ -183,5 +183,5 @@ function BookingDataBox({ booking }) {
     </StyledBookingDataBox>
   );
 }
-
+BookingDataBox.propTypes = { booking: propTypes.object };
 export default BookingDataBox;

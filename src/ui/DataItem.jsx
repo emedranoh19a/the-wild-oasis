@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import propTypes from "prop-types";
 const StyledDataItem = styled.div`
   display: flex;
   align-items: center;
@@ -31,5 +31,9 @@ function DataItem({ icon, label, children }) {
     </StyledDataItem>
   );
 }
-
+DataItem.propTypes = {
+  icon: propTypes.any,
+  label: propTypes.string,
+  children: propTypes.any,
+};
 export default DataItem;

@@ -24,13 +24,12 @@ export async function getBookings({ filter, sortBy, page }) {
   }
   const { data, error, count } = await query;
   console.log("getBookings");
-  // console.log(data); //the data itself
-  // console.log(error); //we try to catch an error if it is possible.
-  // console.log(count); // We are capable to also count the entries as weel.¥¥¥¥ell.s
+
   if (error) {
     console.log(error);
     throw new Error("Bookings could not be loaded");
   }
+
   return { data, count };
 }
 
