@@ -19,7 +19,7 @@ export function useBookings() {
   const [field, direction] = sortByRaw.split("-");
   const sortBy = { field, direction };
 
-  //PAGINATION
+  //3. PAGINATION
   const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
 
   //calling the API method with the prepared variables.

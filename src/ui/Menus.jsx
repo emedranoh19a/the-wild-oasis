@@ -1,5 +1,3 @@
-//TODO Get rid of the unused vars ignore
-/* eslint-disable no-unused-vars */
 import styled from "styled-components";
 import propTypes from "prop-types";
 import { createContext, useContext, useState } from "react";

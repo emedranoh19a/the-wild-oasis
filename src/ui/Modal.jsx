@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 //TODO destroy the eslint unused for file
-/* eslint-disable no-unused-vars */
+
 import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 

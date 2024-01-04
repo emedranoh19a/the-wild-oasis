@@ -21,8 +21,6 @@ const sizes = {
   `,
 };
 
-/* TODO*/
-/*eslint-disable-next-line no-unused-vars */
 const variations = {
   primary: css`
     color: var(--color-brand-50);

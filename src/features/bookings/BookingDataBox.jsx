@@ -103,6 +103,7 @@ const Footer = styled.footer`
 
 // A purely presentational component
 function BookingDataBox({ booking }) {
+  if (!booking) return null;
   const {
     created_at,
     startDate,

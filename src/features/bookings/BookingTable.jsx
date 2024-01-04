@@ -7,9 +7,9 @@ import { useBookings } from "./useBookings";
 import Spinner from "../../ui/Spinner";
 import Pagination from "../../ui/Pagination";
 function BookingTable() {
-  const { bookings, isLoading, count } = useBookings();
+  const { bookings, isLoading, count, error } = useBookings();
   if (isLoading) return <Spinner />;
-
+  if (error) return <p>Oops! something happened!</p>;
   return (
     <Menus>
       <Table columns="0.6fr 2fr 2.4fr 1.4fr 1fr 3.2rem">
