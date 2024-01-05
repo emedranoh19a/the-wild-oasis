@@ -1,11 +1,22 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getBookings } from "../../services/apiBookings";
 import { useSearchParams } from "react-router-dom";
 import { PAGE_SIZE } from "../../utils/constants";
-
+import toast from "react-hot-toast";
+import { deleteBooking as deleteBookingApi } from "../../services/apiBookings";
 export function useBookings() {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
+  //TODO remove unused ignore
+  // eslint-disable-next-line no-unused-vars
+  const { mutate: deleteBooking, isLoading: isDeleting } = useMutation({
+    mutationFn: (bookingId) => deleteBookingApi(bookingId),
+    onSuccess: () => {
+      toast.success("Deleted");
+      queryClient.invalidateQueries({ queryKey: ["bookings"] });
+    },
+    onError: () => toast.error("The booking couldn't be deleted"),
+  });
 
   //1.FILTER
   const filterValue = searchParams.get("status");
@@ -46,5 +57,6 @@ export function useBookings() {
       queryFn: () => getBookings({ filter, sortBy, page: page - 1 }),
     });
   }
-  return { isLoading, bookings, error, count };
+
+  return { isLoading, bookings, error, count, deleteBooking, isDeleting };
 }
