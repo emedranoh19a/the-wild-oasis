@@ -18,21 +18,12 @@ export default function ProtectedRoute({ children }) {
 
   //1. Load the authenticated user.
   const { isLoading, isAuthenticated, fetchStatus } = useUser();
-  console.log("Los 3 mosoqueteros");
-  console.log(isLoading);
-  console.log(isAuthenticated);
-  console.log(fetchStatus);
-
   //2. If there is NO authenticated user, redirect to the login.
   useEffect(() => {
-    console.log("Inside the effect:");
-    console.log(isLoading);
-    console.log(isAuthenticated);
-    console.log(fetchStatus);
     if (!isLoading && !isAuthenticated && fetchStatus !== "fetching")
       navigate("/login");
   }, [isAuthenticated, isLoading, navigate, fetchStatus]);
-
+  //TODO when the user has logged out once, it is difficult to log in again.
   //3. While loading, show a spinner.
   if (isLoading)
     return (

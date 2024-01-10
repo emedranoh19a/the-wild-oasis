@@ -10,9 +10,11 @@ export function useLogin() {
     mutationFn: ({ email, password }) => loginApi({ email, password }),
     // eslint-disable-next-line no-unused-vars
     onSuccess: (user) => {
+      console.log(user);
       //Manually set data into the cache
-      queryClient.setQueriesData(["user"], user);
-      navigate("/dashboard");
+      queryClient.setQueryData(["user"], user.user);
+      //Going back should not be allowed with replace:true
+      navigate("/dashboard", { replace: true });
     },
     // eslint-disable-next-line no-unused-vars
     onError: (error) => {

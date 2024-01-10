@@ -1,4 +1,8 @@
+//TODO remove the ignored vars es lint
+
+/* eslint-disable no-unused-vars */
 import styled from "styled-components";
+import { useUser } from "./useUser";
 
 const StyledUserAvatar = styled.div`
   display: flex;
@@ -19,3 +23,20 @@ const Avatar = styled.img`
   border-radius: 50%;
   outline: 2px solid var(--color-grey-100);
 `;
+
+export default function UserAvatar() {
+  //We don't need the isLoading state,
+  //since the user came at the same
+  // timing of authentication
+  const { user } = useUser();
+  const { fullName, avatar } = user.user_metadata;
+  return (
+    <StyledUserAvatar>
+      <Avatar
+        src={avatar || "default-user.jpg"}
+        alt={`Avatar of ${fullName}`}
+      />
+      <span>{fullName}</span>
+    </StyledUserAvatar>
+  );
+}
