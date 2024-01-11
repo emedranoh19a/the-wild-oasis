@@ -33,7 +33,6 @@ DarkModeProvider.propTypes = {
 
 function useDarkMode() {
   const context = useContext(DarkModeContext);
-  console.log(context);
   if (context === undefined)
     throw new Error(
       "Dark Mode Context was used outside the respective Context Provider"
