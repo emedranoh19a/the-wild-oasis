@@ -1,5 +1,17 @@
+/* eslint-disable no-unused-vars */
+//TODO remove the ESLINT ignore unused vars for the file
 import styled from "styled-components";
-
+import PropTypes from "prop-types";
+import Heading from "../../ui/Heading";
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
+import { useDarkMode } from "../../context/DarkModeContext";
 const ChartBox = styled.div`
   /* Box */
   background-color: var(--color-grey-0);
@@ -130,3 +142,47 @@ function prepareData(startData, stays) {
 
   return data;
 }
+
+function DurationChart({ confirmedStays }) {
+  const { isDarkMode } = useDarkMode();
+  const startData = isDarkMode ? startDataDark : startDataLight;
+  const data = prepareData(startData, confirmedStays);
+  return (
+    <ChartBox>
+      <Heading as="h2">Stay duration summary</Heading>
+      <ResponsiveContainer width="100%" heigth={240}>
+        <PieChart>
+          <Pie
+            data={data}
+            nameKey="duration"
+            dataKey="value"
+            innerRadius={85}
+            outerRadius={110}
+            cx="50%"
+            cy="40%"
+            paddingAngle={3}
+          >
+            {data.map((entry, index) => (
+              <Cell stroke={entry.color} fill={entry.color} key={index} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend
+            verticalAlign="middle"
+            align="right"
+            width="30%"
+            layout="vertical"
+            iconSize={15}
+            iconType="circle"
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </ChartBox>
+  );
+}
+
+DurationChart.propTypes = {
+  confirmedStays: PropTypes.array,
+};
+
+export default DurationChart;
